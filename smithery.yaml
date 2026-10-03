@@ -1,0 +1,17 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      apiBase:
+        type: string
+        default: "https://webaudits.pro/api/action"
+        description: "WebAudits.pro production action API base URL"
+  commandFunction: |-
+    (config) => ({
+      command: 'node',
+      args: ['index.js'],
+      env: {
+        WEBAUDITS_API_BASE: config.apiBase || 'https://webaudits.pro/api/action'
+      }
+    })

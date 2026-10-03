@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "webaudits": {
+      "command": "node",
+      "args": [
+        "B:/Project Seo for WU and AA/projects/micro_saas_extensions/vitalssniper_web/mcp_server/index.js"
+      ],
+      "env": {
+        "WEBAUDITS_API_BASE": "https://webaudits.pro/api/action"
+      }
+    }
+  }
+}
