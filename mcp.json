@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "webaudits": {
+      "url": "https://webaudits.pro/api/mcp"
+    }
+  }
+}
