@@ -6,10 +6,20 @@ Exposes real-time Core Web Vitals, DOM bloat, and AI crawler accessibility audit
 to Cursor, Claude Desktop, Antigravity, and other MCP clients.
 """
 
+import sys
+
+# Enforce UTF-8 terminal piping on Windows
+if sys.platform.startswith("win"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", line_buffering=True, errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", line_buffering=True, errors="replace")
+    except AttributeError:
+        pass
+
 from enum import Enum
 from typing import Optional, Dict, Any
 import httpx
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("webaudits_mcp")
@@ -38,6 +48,15 @@ class AuditInput(BaseModel):
         default=ResponseFormat.MARKDOWN,
         description="Output format: 'markdown' for human-readable diagnostic or 'json' for machine processing."
     )
+
+    @field_validator("url", mode="before")
+    @classmethod
+    def normalize_url(cls, v: str) -> str:
+        if isinstance(v, str):
+            v = v.strip()
+            if not v.startswith(("http://", "https://")):
+                v = f"https://{v}"
+        return v
 
 
 async def execute_audit(endpoint: str, url: str) -> Dict[str, Any]:
